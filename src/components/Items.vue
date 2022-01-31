@@ -19,10 +19,11 @@
         </section>
       
         <ul class="deck" id="card-deck">
-          <li class="card" type="artstation">
-            <i class="fab fa-artstation"></i>
+          <li class="card" :type="card.type"
+          v-for="card in cards" :key="card" @click.prevent="displayCard">
+            <i :class="card.class"></i>
           </li>
-          <li class="card" type="fan">
+          <!-- <li class="card" type="fan">
             <i class="fas fa-fan"></i>
           </li>
           <li class="card match" type="pickup">
@@ -66,7 +67,7 @@
           </li>
           <li class="card" type="cube">
             <i class="fa fa-cube"></i>
-          </li>
+          </li> -->
         </ul>
      </div>
 </template>
@@ -111,7 +112,8 @@ export default {
        class: "fa fa-bicycle"
      },
    ]);
-  const cards=  ref([].concat(_.cloneDeep(cardsType.value), _.cloneDeep(cardsType.value)));
+  const cards=  ref([].concat(_.cloneDeep(cardsType.value), _.cloneDeep(cardsType .value)));
+  cards.value = _.shuffle(cards.value) 
   console.log(cards.value);
    return {cards,cardsType};
  }
