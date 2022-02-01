@@ -20,7 +20,10 @@
       
         <ul class="deck" id="card-deck">
           <li class="card" :type="card.type"
-          v-for="card in cards" :key="card" @click.prevent="displayCard">
+          v-for="card in cards" :key="card" 
+          @click.prevent="displayCard"
+          :class="{'disabled': card.disabled, 'match': card.match,'unmatched': card.unmatched,'open': card.open, 'show': card.show}"
+          >
             <i :class="card.class"></i>
           </li>
           <!-- <li class="card" type="fan">
@@ -73,10 +76,19 @@
 </template>
 
 <script>
-import {ref, onMounted } from '@vue/reactivity';
+import {ref,onBeforeUpdate, onUpdated } from '@vue/reactivity';
 export default {
  setup(){
-   
+  // const  showSplash = ref(false)
+	
+	// const	started =  ref(false);
+	// const	startTime =  ref(0);
+	// const	turns =  ref(0);
+	// const	flipBackTimer =  ref(null);
+	// const	timer =  ref(null);
+	// const	time =  ref("0:0");
+	// const	match =  ref(0);
+
   const _ = require('lodash');
   const cardsType = ref([
      {
@@ -96,8 +108,8 @@ export default {
        class: "fas fa-vr-cardboard"
      },
       {
-       type: "bolt", 
-       class: "bolt"
+       type: "atom", 
+       class: "fas fa-atom"
      },
       {
        type: "cube", 
@@ -114,8 +126,99 @@ export default {
    ]);
   const cards=  ref([].concat(_.cloneDeep(cardsType.value), _.cloneDeep(cardsType .value)));
   cards.value = _.shuffle(cards.value) 
-  console.log(cards.value);
-   return {cards,cardsType};
+  cards.value.forEach((card) => {
+    card.disabled = false;
+		card.match = false;
+    card.unmatched = false;
+    card.show = false;
+    card.open = false;
+  });
+  const	openedCards  =  ref([]);
+  const index = ref([]);
+  const cardOpen = (event) => {
+    const parent = event.target.parentNode;
+    index.value.push(Array.prototype.indexOf.call(parent.children, event.target));
+    openedCards.value.push(event.target);
+    const len = openedCards.value.length;
+    if(len == 2){
+      // moveCounter();
+
+      if(openedCards.value[0].type === openedCards.value[1].type){
+        matched();
+      }else{
+        unmatched(index);
+      }
+    }
+  };
+  const matchCard =ref([]);
+  const matched = () => {
+    cards.value.forEach( (card) => {
+      if(openedCards.value[0].type === card.type){
+        card.match = true;
+      }
+    })
+    openedCards.value[0].match = true;
+    openedCards.value[1].match = true;
+    openedCards.value[0].classList.remove("show", "open");
+    openedCards.value[1].classList.remove("show", "open");
+    matchCard.value.push(openedCards.value[1].type);
+    openedCards.value = [];
+    index.value =[];
+  };
+
+  const unmatched= ((index) => {
+      disable();
+
+      for (let i = 0; i < index.value.length; i++) {
+        cards.value[index.value[i]].unmatched = true;
+        cards.value[index.value[i]].show = true;
+        cards.value[index.value[i]].open = true;
+      }
+
+      setTimeout(function() {
+        
+        enable();
+        openedCards.value = [];
+        index.value =[];
+      }, 9000);
+  })
+  // disable cards temporarily
+  const disable = () => {
+    cards.value.forEach( card => {
+      card.disabled = true
+    });
+  }
+
+  //enable cards and disable matched cards
+  const enable = () => {
+    cards.value.forEach( card => {
+      card.disabled = false;
+      card.unmatched = false;
+      card.open = false;
+      card.show = false;
+       for (let i = 0; i < matchCard.value.length; i++) {
+        if(matchCard.value[i] === card.type){
+          card.disabled = true;
+          card.open = true;
+          card.show = true;
+        }
+      }
+    });
+  }
+
+  const displayCard = (event) => {
+    event.target.classList.toggle("open");
+    event.target.classList.toggle("show");
+    event.target.classList.toggle("disabled");
+    cardOpen(event);
+  }
+
+ 
+
+
+
+
+   return {cards,cardsType,displayCard,openedCards,cardOpen,matchCard,matched,unmatched,disable,enable,index};
  }
  
 }
