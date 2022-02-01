@@ -2,12 +2,10 @@
      <div>
        <section class="score-panel">
           <ul class="stars">
-            <li><i class="fa fa-star"></i></li>
-            <li><i class="fa fa-star"></i></li>
-            <li><i class="fa fa-star"></i></li>
+            <li v-for=" n in stars" :key="n"><i class="fa fa-star"></i></li>
           </ul>
       
-          <span class="moves">0 Move</span> 
+          <span class="moves" >{{moves}}</span> 
       
           <div class="timer">
           </div>
@@ -79,15 +77,6 @@
 import {ref,onBeforeUpdate, onUpdated } from '@vue/reactivity';
 export default {
  setup(){
-  // const  showSplash = ref(false)
-	
-	// const	started =  ref(false);
-	// const	startTime =  ref(0);
-	// const	turns =  ref(0);
-	// const	flipBackTimer =  ref(null);
-	// const	timer =  ref(null);
-	// const	time =  ref("0:0");
-	// const	match =  ref(0);
 
   const _ = require('lodash');
   const cardsType = ref([
@@ -141,7 +130,7 @@ export default {
     openedCards.value.push(event.target);
     const len = openedCards.value.length;
     if(len == 2){
-      // moveCounter();
+      moveCounter();
 
       if(openedCards.value[0].type === openedCards.value[1].type){
         matched();
@@ -180,7 +169,7 @@ export default {
         enable();
         openedCards.value = [];
         index.value =[];
-      }, 9000);
+      }, 900);
   })
   // disable cards temporarily
   const disable = () => {
@@ -213,12 +202,33 @@ export default {
     cardOpen(event);
   }
 
+  const moves = ref("0 move");
+  const move = ref(0);
+  const stars = ref(5);
+  const moveCounter = () => {
+    move.value++
+    moves.value = move.value + 'moves'
+
+    //stars rating
+    if(move.value>18){
+      stars.value = 1;
+    }else if (move.value>15){
+      stars.value = 2;
+    }else if (move.value>13){
+      stars.value = 3;
+    }else if (move.value>10){
+      stars.value = 4;
+    }else{
+      stars.value=5;
+    }
+    
+  }
  
 
 
 
 
-   return {cards,cardsType,displayCard,openedCards,cardOpen,matchCard,matched,unmatched,disable,enable,index};
+   return {cards,cardsType,displayCard,openedCards,cardOpen,matchCard,matched,unmatched,disable,enable,index,moves,moveCounter,stars};
  }
  
 }
