@@ -1,7 +1,7 @@
 # memorygameapp
 
 ### Live Demo
-See [memorygame](https://cli.vuejs.org/config/).
+See [memorygame](https://memorygame-with-vue.vercel.app/).
 
 ## Project setup
 ```
