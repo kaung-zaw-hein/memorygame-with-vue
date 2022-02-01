@@ -8,6 +8,7 @@
           <span class="moves" >{{moves}}</span> 
       
           <div class="timer">
+            {{time}}
           </div>
       
           <div class="restart" onclick=startGame()>
@@ -209,6 +210,12 @@ export default {
     move.value++
     moves.value = move.value + 'moves'
 
+    if(move.value ==1){
+      second.value = 0;
+      minute.value = 0;
+      timer();
+    }
+
     //stars rating
     if(move.value>18){
       stars.value = 1;
@@ -223,12 +230,40 @@ export default {
     }
     
   }
- 
+  const second = ref(0);
+  const minute = ref(0);
+  const time = ref("00:00")
+  const timer =  ()=> {
+    const interval = setInterval(() => {
+      time.value = `${minute.value < 10 ? '0' +  minute.value : minute.value}:${second.value < 10 ? '0' +  second.value : second.value}`;
+      second.value++;
+      
+      if (second.value == 60) {
+        minute.value++;
+        second.value = 0;
+      }
+    }, 1000);
+  }
 
 
 
 
-   return {cards,cardsType,displayCard,openedCards,cardOpen,matchCard,matched,unmatched,disable,enable,index,moves,moveCounter,stars};
+   return {cards,
+   cardsType,
+   displayCard,
+   openedCards,
+   cardOpen,
+   matchCard,
+   matched,
+   unmatched,
+   disable,
+   enable,
+   index,
+   moves,
+   moveCounter,
+   stars,
+   timer,
+   time};
  }
  
 }
