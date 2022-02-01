@@ -1,5 +1,8 @@
 # memorygameapp
 
+### Live Demo
+See [memorygame](https://cli.vuejs.org/config/).
+
 ## Project setup
 ```
 npm install
@@ -17,3 +20,7 @@ npm run build
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+### Inspired from 
+Sandra Israel-Ovirih [Better dev](https://www.better.dev/build-a-memory-matching-game-in-javascript#7-a-congratulations-modal).
+
