@@ -11,7 +11,7 @@
             {{time}}
           </div>
       
-          <div class="restart" onclick=startGame()>
+          <div class="restart" @click.prevent="reset">
             Reset
             <i class="fa fa-repeat"></i>
           </div>
@@ -197,9 +197,12 @@ export default {
   }
 
   const displayCard = (event) => {
-    event.target.classList.toggle("open");
-    event.target.classList.toggle("show");
-    event.target.classList.toggle("disabled");
+    cards.value[Array.prototype.indexOf.call(event.target.parentNode.children, event.target)].open = true;
+    cards.value[Array.prototype.indexOf.call(event.target.parentNode.children, event.target)].show = true;
+    cards.value[Array.prototype.indexOf.call(event.target.parentNode.children, event.target)].disabled = true;
+    // event.target.classList.toggle("open");
+    // event.target.classList.toggle("show");
+    // event.target.classList.toggle("disabled");
     cardOpen(event);
   }
 
@@ -233,8 +236,9 @@ export default {
   const second = ref(0);
   const minute = ref(0);
   const time = ref("00:00")
+  let timerinterval
   const timer =  ()=> {
-    const interval = setInterval(() => {
+    timerinterval = setInterval(() => {
       time.value = `${minute.value < 10 ? '0' +  minute.value : minute.value}:${second.value < 10 ? '0' +  second.value : second.value}`;
       second.value++;
       
@@ -245,6 +249,35 @@ export default {
     }, 1000);
   }
 
+  const reset = () => {
+
+    //reset all class
+    cards.value.forEach((card) => {
+      card.disabled = false;
+      card.match = false;
+      card.unmatched = false;
+      card.show = false;
+      card.open = false;
+  });
+    //shuffle
+    cards.value = _.shuffle(cards.value) 
+
+    //reset cards
+    openedCards.value = [];
+    index.value = [];
+    matchCard.value= [];
+
+    //moves and stars
+    move.value = 0;
+    moves.value = "0 move"
+    stars.value = 5;
+
+    //reset time
+    second.value = 0;
+    minute.value = 0;
+    time.value = "00:00";
+    clearInterval(timerinterval)
+  }
 
 
 
@@ -263,7 +296,8 @@ export default {
    moveCounter,
    stars,
    timer,
-   time};
+   time,
+   reset};
  }
  
 }
