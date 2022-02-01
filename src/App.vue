@@ -3,8 +3,8 @@
    <header>
           <img src="./assets/Brnyr-logos_transparent.png" alt="">
   </header>
-  <Items></Items>
-  <Result></Result>
+  <Items @result="results"></Items>
+  <Result :res="res" @reset="reset"></Result>
 </div>
 </template>
 
@@ -12,11 +12,24 @@
 
 import Items from './components/Items'
 import Result from './components/Result'
+import {ref} from '@vue/reactivity'
 export default {
   name: 'App',
   components: {
     Items,
     Result,
+  },
+  setup(){
+    const res = ref([]);
+    const state = ref(false);
+    let results = (a) => {
+      res.value.push(...a);
+    }
+    let reset = () =>{
+      res.value=[];
+      location.reload();
+    }
+    return {results,res,reset,state}
   }
 }
 </script>

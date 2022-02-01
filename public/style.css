@@ -159,9 +159,10 @@ html {
   }
   
   .popup {
-    margin: 70px auto;
-    padding: 20px;
+    margin: 100px auto;
+    padding: 50px  20px;
     background: #ffffff;
+    color:#3d3d3d;
     border-radius: 5px;
     width: 85%;
     position: relative;
@@ -185,7 +186,7 @@ html {
   }
   
   .popup .close:hover {
-    color: #e5f720;
+    color: #00e1ff;
   }
   
   .popup .content-1,

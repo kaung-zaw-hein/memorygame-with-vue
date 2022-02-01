@@ -75,10 +75,10 @@
 </template>
 
 <script>
-import {ref,onBeforeUpdate, onUpdated } from '@vue/reactivity';
+import {ref} from '@vue/reactivity';
 export default {
- setup(){
-
+ setup(props,context){
+   
   const _ = require('lodash');
   const cardsType = ref([
      {
@@ -152,6 +152,9 @@ export default {
     openedCards.value[0].classList.remove("show", "open");
     openedCards.value[1].classList.remove("show", "open");
     matchCard.value.push(openedCards.value[1].type);
+     if(matchCard.value.length === 8){
+      context.emit("result",[matchCard.value,moves.value,stars.value,time.value]);
+    }
     openedCards.value = [];
     index.value =[];
   };
@@ -218,7 +221,6 @@ export default {
       minute.value = 0;
       timer();
     }
-
     //stars rating
     if(move.value>18){
       stars.value = 1;
